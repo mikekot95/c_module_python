@@ -2,20 +2,22 @@
 #include <stdbool.h>
 
 PyObject* TestModule_TestMethod(PyObject* self, PyObject* args) {
-	bool flag;
-	int value;
+	struct TestClass {
+		bool flag;
+		int value;
+	} TestObject;
 	if (PyTuple_Size(args) != 2) {
 		return NULL;
 	}
-	if (!PyArg_ParseTuple(args, "pi", &flag, &value)) {
+	if (!PyArg_ParseTuple(args, "pi", &TestObject.flag, &TestObject.value)) {
 		return NULL;
 	}
-	if (flag) {
-		value++;
+	if (TestObject.flag) {
+		TestObject.value++;
 	}else {
-		value--;
+		TestObject.value--;
 	}
-	return Py_BuildValue("i", value);
+	return Py_BuildValue("i", TestObject.value);
 }
 
 static PyMethodDef TestModule_funcs[] = {
@@ -40,8 +42,3 @@ PyMODINIT_FUNC PyInit_TestModule(void) {
 	if (!module) return NULL;
 	return module;
 }
-
-/*PyMODINIT_FUNC PyInit_TestModule(void) {
-	Py_InitModule3("TestModule", TestModule_funcs, "TestModule");
-}*/
-
